@@ -24,3 +24,11 @@ for paragraf in belge.paragraphs:
         print("❌ HATA: Yazarlar arasında 've' yerine '&' kullanılmalı")
         print("   Kaynak:", metin[:50], "...")
         print()
+        # KURAL 3: Her kaynakta dergi ya da kitap adı italik olmalı
+    # Paragraftaki parçalardan (run) en az biri italik mi, ona bakıyoruz
+    italik_var = any(parca.italic for parca in paragraf.runs)
+    if not italik_var:
+        print("❌ HATA: Hiç italik yok (dergi ya da kitap adı italik olmalı)")
+        print("   Kaynak:", metin[:50], "...")
+        print()
+          
