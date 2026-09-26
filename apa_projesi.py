@@ -31,4 +31,8 @@ for paragraf in belge.paragraphs:
         print("❌ HATA: Hiç italik yok (dergi ya da kitap adı italik olmalı)")
         print("   Kaynak:", metin[:50], "...")
         print()
-          
+        # KURAL 4: DOI varsa https://doi.org/ ile başlamalı (eski "doi:" formatı yanlış)
+    if "doi" in metin.lower() and "https://doi.org/10." not in metin:
+        print("❌ HATA: DOI eski formatta, https://doi.org/... şeklinde olmalı")
+        print("   Kaynak:", metin[:50], "...")
+        print()   
