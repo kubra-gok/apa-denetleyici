@@ -36,3 +36,13 @@ for paragraf in belge.paragraphs:
         print("❌ HATA: DOI eski formatta, https://doi.org/... şeklinde olmalı")
         print("   Kaynak:", metin[:50], "...")
         print()
+        # KURAL 5: Font tutarlılığını kontrol et (tüm paragraflar aynı fontta olmalı)
+        # KURAL 5: Font tutarlılığı (her parça Times New Roman olmalı)
+    yanlis_font_var = False
+    for parca in paragraf.runs:
+        if parca.font.name != "Times New Roman":
+            yanlis_font_var = True
+    if yanlis_font_var:
+        print("❌ HATA: Font tutarlı değil (Times New Roman olmalı)")
+        print("   Kaynak:", metin[:50], "...")
+        print()
