@@ -1,4 +1,5 @@
 import re
+import requests
 from docx import Document
 
 # Word dosyasını aç
@@ -40,9 +41,46 @@ for paragraf in belge.paragraphs:
         # KURAL 5: Font tutarlılığı (her parça Times New Roman olmalı)
     yanlis_font_var = False
     for parca in paragraf.runs:
-        if parca.font.name != "Times New Roman":
+        if parca.font.name is not None and parca.font.name != "Times New Roman":
             yanlis_font_var = True
     if yanlis_font_var:
         print("❌ HATA: Font tutarlı değil (Times New Roman olmalı)")
         print("   Kaynak:", metin[:50], "...")
         print()
+          # KURAL 6: DOI doğrulama (Crossref'e sorarak)
+    bulunan = re.search(r"10\.\d{4,9}/\S+", metin)
+    if bulunan:
+        doi = bulunan.group()
+        # Sondaki nokta hem APA hatası hem de Crossref'i şaşırtır
+        if doi.endswith("."):
+            print("❌ HATA: DOI'nin sonunda nokta olmamalı")
+            print("   Kaynak:", metin[:50], "...")
+            print()
+            doi = doi.rstrip(".")
+
+        try:
+            cevap = requests.get("https://api.crossref.org/works/" + doi, timeout=10)
+        except requests.exceptions.RequestException:
+            print("⚠️  UYARI: Crossref'e ulaşılamadı, bu DOI kontrol edilemedi")
+            print("   Kaynak:", metin[:50], "...")
+            print()
+        else:
+            if cevap.status_code == 404:
+                print("❌ HATA: Bu DOI Crossref'te yok (hatalı ya da uydurma olabilir)")
+                print("   Kaynak:", metin[:50], "...")
+                print()
+            elif cevap.status_code == 200:
+                basliklar = cevap.json()["message"].get("title", [])
+                if basliklar:
+                    gercek_baslik = basliklar[0]
+                    # Crossref'teki başlığın kelimelerinin kaçı kaynakçada geçiyor?
+                    kelimeler = re.findall(r"\w+", gercek_baslik.lower())
+                    eslesen = 0
+                    for kelime in kelimeler:
+                        if kelime in metin.lower():
+                            eslesen = eslesen + 1
+                    if eslesen / len(kelimeler) < 0.7:
+                        print("❌ HATA: DOI başka bir makaleye ait olabilir")
+                        print("   Kaynak:", metin[:50], "...")
+                        print("   Crossref'teki başlık:", gercek_baslik)
+                        print()  
