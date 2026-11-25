@@ -1,9 +1,22 @@
 import re
 import requests
+import tkinter as tk
+from tkinter import filedialog
 from docx import Document
 
-# Word dosyasını aç
-belge = Document("deneme_kaynakca.docx")
+pencere = tk.Tk()
+pencere.withdraw()
+
+dosya_adi = filedialog.askopenfilename(
+    title="Kontrol edilecek kaynakçayı seç",
+    filetypes=[("Word dosyası", "*.docx")]
+)
+
+if dosya_adi == "":
+    print("Dosya seçilmedi.")
+    exit()
+
+belge = Document(dosya_adi)
 
 # Her paragrafı tek tek gez
 for paragraf in belge.paragraphs:
