@@ -22,4 +22,17 @@ When I worked as an editor, I checked DOIs by hand. The program follows the same
 3. **Compare the titles.** If the DOI exists, Crossref returns the real title of the article. The program checks how many words of this title appear in the reference. If fewer than 70% of the words match, the DOI may belong to a different article. The titles do not need to match exactly, because they are often written differently (for example, in capital letters).
 ## How to run it
 
+1. Make sure Python is installed on your computer.
+2. Download this project from GitHub: click the green **Code** button and choose **Download ZIP**. Then unzip the folder.
+3. Open the terminal in the project folder and install the required libraries:
+   ```
+   pip install -r requirements.txt
+   ```
+4. Run the program:
+   ```
+   python apa_projesi.py
+   ```
+5. A window will open. Choose the Word (.docx) file you want to check. The mistakes will be listed in the terminal.
+
+You can try it with `deneme_kaynakca.docx`, a sample reference list with six intentional mistakes.
 ## Limitations and future work
