@@ -35,4 +35,48 @@ When I worked as an editor, I checked DOIs by hand. The program follows the same
 5. A window will open. Choose the Word (.docx) file you want to check. The mistakes will be listed in the terminal.
 
 You can try it with `deneme_kaynakca.docx`, a sample reference list with six intentional mistakes.
+
+## How I used AI
+
+I developed this project with Claude (an AI assistant) as a helper.
+
+- **Ideas:** I chose the topic from my own editing experience at Sakarya University Press. The AI helped me plan the steps.
+- **Code:** At first, the AI wrote most of the code and explained it line by line. Later I started writing parts myself (for example the file check, the font rule and the DOI clean-up), and the AI reviewed them.
+- **My decisions:** The rules come from mistakes I saw as an editor. The DOI verification method (comparing the title from Crossref with the reference) is the method I used by hand as an editor. The idea that the program should ask before changing anything was also mine.
+- **Finding bugs:** I found several false positives myself. For example, the word "Doing" was detected as an old DOI format, and an italic title in the wrong place was not detected.
+- **Testing:** The AI created a sample reference list with known mistakes. I used it to test my program and three similar tools.
+- **Where the AI was wrong:** Some AI suggestions were incorrect, so I checked them. For example, the AI first thought there was no Turkish tool for this, but my research showed there is one.
+
 ## Limitations and future work
+
+**Current limitations**
+- The program is designed for English references. In Turkish references, APA uses "ve" instead of "&", so some rules give false warnings.
+- The program only finds mistakes. It does not fix them yet.
+- It checks the reference list only, not the citations in the text.
+- Books usually have no DOI, so they cannot be verified with Crossref.
+
+**Future work**
+- **Language settings:** Adjust the rules for Turkish and English references.
+- **Fixing DOIs:** When a DOI is wrong or missing, search Crossref with the title and suggest the correct DOI. As an editor, I did this by hand by trying possible corrections.
+- **Human in the loop:** Show each correction and ask the user "Fix this? (y/n)". The program will save the approved changes to a new Word file and never change the original.
+- **In-text citations:** Check that every citation in the text matches a reference in the list.
+
+## Similar tools
+
+I tested three similar tools with the same sample file (`deneme_kaynakca.docx`, six known mistakes).
+
+| Check | Kaynakça Doğrula | Recite (free) | Edifix (paid) | This program |
+|---|---|---|---|---|
+| Year in parentheses | ❌ | ✅ | ✅ fixed | ✅ |
+| "&" before last author | – | ✅ | ✅ fixed | ✅ |
+| Italic journal/book title | ❌ | ❌ | ✅ fixed | ✅ |
+| Same font | – | ❌ | ❌ (plain text only) | ✅ |
+| Old DOI format | – | ❌ | ✅ fixed | ✅ |
+| DOI exists (Crossref) | ✅ | ❌ (paid only) | ✅ | ✅ |
+| In-text citations | – | ✅ | – | ❌ |
+
+**What I learned:**
+- Free tools missed most formatting mistakes.
+- Edifix was the strongest tool. It also fixes the mistakes. But it is paid, it works with plain text (so it cannot check fonts), and it did not recognize the Turkish "ve".
+- Recite is very good at matching in-text citations, but it did not recognize the Turkish heading "Kaynakça".
+- My program is free, reads the Word file directly on the user's computer, and checks fonts. Fixing mistakes is the next step.
