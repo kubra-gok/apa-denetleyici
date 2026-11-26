@@ -17,7 +17,7 @@ if dosya_adi == "":
     exit()
 
 belge = Document(dosya_adi)
-
+soyadlar = []
 # Her paragrafı tek tek gez
 for paragraf in belge.paragraphs:
     metin = paragraf.text.strip()
@@ -96,4 +96,10 @@ for paragraf in belge.paragraphs:
                         print("❌ HATA: DOI başka bir makaleye ait olabilir")
                         print("   Kaynak:", metin[:50], "...")
                         print("   Crossref'teki başlık:", gercek_baslik)
-                        print()  
+                        print()
+ # KURAL 7: Kaynakça alfabetik sırada olmalı
+    soyad = metin.split(",")[0]
+    soyadlar.append(soyad)
+
+if soyadlar != sorted(soyadlar):
+    print("❌ HATA: Kaynakça alfabetik sırada değil")
